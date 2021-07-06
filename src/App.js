@@ -1,7 +1,10 @@
 import React from 'react';
 import TodoForm from './components/TodoForm';
 import TodoList from './components/TodoList';
-// import './styles.scss';
+
+// - `<App />` will hold all the data needed for this project. It will also be the container for your Todo Components.
+//   - All of your application data will be stored here on `<App />`.
+//   - All of your `handler` functions should live here on `<App />`.
 
 const todos = [
   {
@@ -33,23 +36,60 @@ class App extends React.Component {
     }
   }
 
+  toggleTodo = id => {
+    this.setState({
+      ...this.state.todos,
+      todos: this.state.todos.map(todo => {
+        if (todo.id === id) {
+          return ({
+            ...todo,
+            completed: !todo.completed
+          })
+        } else {
+          return todo
+        }
+      })
+    });
+  }
+
+  addTodo = name => {
+    const newTodo = {
+      name: name,
+      id: Date.now(),
+      completed: false
+    }
+    this.setState({
+      todos: [...this.state.todos, newTodo]
+    })
+  }
+
+  clearPurchased = () => {
+    this.setState({
+      ...this.state,
+      todos: this.state.todos.filter(todo => {
+        return todo.completed === false
+      })
+    });
+  }
+
   render() {
     return (
-      <div className="App">
-        <div className="Header">
+      <div className="app">
+        <div className="header">
           <h1>Todo App</h1>
-        </div>
-        {/* <div className="Form-Container">
           <TodoForm 
-          
+            addTodo={this.addTodo}
           />
         </div>
         <TodoList 
-        
-        /> */}
+          clearPurchased={this.clearPurchased}
+          toggleTodo={this.toggleTodo}
+          todos={this.state.todos}
+        />
       </div>
     );
   }
 }
 
 export default App;
+
